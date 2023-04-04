@@ -27,15 +27,15 @@ def record_speech(UIController: UIController, medications):
     UIController.root.update()
     for phrase in LiveSpeech():
         print(phrase)
-        if "Add" in phrase.title():
+        if "add" in phrase:
             UIController.goToScanBottle()
             UIController.openBottleScanner()
-        elif "Edit" in phrase.title():
+        elif "edit" in phrase:
             UIController.goToScanBottle()
             UIController.editBottleInfo()
-        elif "Scan" in phrase.title():
+        elif "scan" in phrase:
             UIController.goToScanBottle()
-        elif "Drug" in phrase.title():
+        elif "drug" in phrase:
             UIController.goToDrugInfo()
     # with sr.Microphone() as source:
     #    print("Listening...")
