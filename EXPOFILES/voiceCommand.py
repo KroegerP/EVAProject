@@ -26,6 +26,7 @@ def record_speech(UIController: UIController, medications):
     )
     UIController.root.update()
     for phrase in LiveSpeech():
+        print(phrase)
         if "Add" in phrase.title():
             UIController.goToScanBottle()
             UIController.openBottleScanner()
