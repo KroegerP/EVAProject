@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 import speech_recognition as sr
+from pocketsphinx import LiveSpeech
 from typing import TYPE_CHECKING
 import functools
 from drugInfo import individualDrug
@@ -24,24 +25,35 @@ def record_speech(UIController: UIController, medications):
         text="I'm listening, please say\n the page you wish\n to navigate to."
     )
     UIController.root.update()
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
+    for phrase in LiveSpeech():
+        if "Add" in phrase.title():
+            UIController.goToScanBottle()
+            UIController.openBottleScanner()
+        elif "Edit" in phrase.title():
+            UIController.goToScanBottle()
+            UIController.editBottleInfo()
+        elif "Scan" in phrase.title():
+            UIController.goToScanBottle()
+        elif "Drug" in phrase.title():
+            UIController.goToDrugInfo()
+    # with sr.Microphone() as source:
+    #    print("Listening...")
+    #    r.pause_threshold = 1
+    #    audio = r.listen(source)
 
-    try:
-        # Use the Google Speech Recognition API
-        command = r.recognize_google(audio).title()
-        navigateMenu(UIController, command, medications)
-        print("You said: " + command + "\n")
+    # try:
+    # Use the Google Speech Recognition API
+    #    command = r.recognize_google(audio).title()
+    #    navigateMenu(UIController, command, medications)
+    #    print("You said: " + command + "\n")
 
     # Error handling
-    except sr.UnknownValueError:
-        myText.configure(
-            text="I'm sorry, I couldn't understand\n you. Please press the button\nto try again."
-        )
-        UIController.root.update()
-        print("I couldn't understand you. Please try again.")
+    # except sr.UnknownValueError:
+    #    myText.configure(
+    #        text="I'm sorry, I couldn't understand\n you. Please press the button\nto try again."
+    #    )
+    #    UIController.root.update()
+    #    print("I couldn't understand you. Please try again.")
 
     return
 
