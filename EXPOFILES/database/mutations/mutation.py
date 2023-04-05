@@ -60,7 +60,7 @@ def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
     refillDateStr = newMedDict["refillDate"] if "refillDate" in newMedDict else None
     timesPerDay = newMedDict["timesPerDay"] if "timesPerDay" in newMedDict else None
     # folderPath = newMedDict["medName"] if "medName" in newMedDict else None
-    folderPath = f"EXPOFILES/meds/{medName}"
+    folderPath = f"EXPOFILES/database/meds/Ibuprofen"
 
     sql = f"INSERT INTO public.medications \
             (medname, datefilled, refillsleft, refilldate, \

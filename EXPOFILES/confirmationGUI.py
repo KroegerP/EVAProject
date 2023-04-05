@@ -47,7 +47,7 @@ def updateGrid(UIController: UIController, displayedMedications: list[Medication
                 UIController,
                 med.medName,
                 med.id,
-                (med.folderPath + med.medName + ".png"),
+                (med.folderPath + med.medName + ".png") if med.medName in ['Ciprofloxacin', 'metroNIDAZOLE', 'Rosuvastatin', 'Ibuprofen',  'Tamsulosin'] else 'EXPOFILES/database/meds/Ibuprofen/3/Ibuprofen.png',
             ))
 
     UIController.root.update()
@@ -121,7 +121,7 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
                     UIController,
                     med.medName,
                     med.id,
-                    (med.folderPath + med.medName + ".png"),
+                    (med.folderPath + med.medName + ".png") if med.medName in ['Ciprofloxacin', 'metroNIDAZOLE', 'Rosuvastatin', 'Ibuprofen',  'Tamsulosin'] else 'EXPOFILES/database/meds/Ibuprofen/3/Ibuprofen.png',
                 ),
             ).grid(row=index, column=0, pady=GRID_PADDING)
 
