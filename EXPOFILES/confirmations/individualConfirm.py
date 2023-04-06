@@ -27,12 +27,12 @@ def confirmMedTake(UIController: UIController, medName: str, taken: bool):
     else:
         ttl = f"Patient has not taken their {medName}!"
 
-    if on_rpi() and os.getenv("APP_ENV") == "production":
-        UIController.firebase.send_notification(
-            title=ttl,
-            body="Open the app to see more info.",
-            data={"drug": medName, "taken": f"{taken}"},
-        )
+    # if on_rpi() and os.getenv("APP_ENV") == "production":
+    UIController.firebase.send_notification(
+        title=ttl,
+        body="Open the app to see more info.",
+        data={"drug": medName, "taken": f"{taken}"},
+    )
     print("Completed Confirm!")
     UIController.clearUI("Confirm")
     hour_min = datetime.now().strftime("%H:%M").split(":")

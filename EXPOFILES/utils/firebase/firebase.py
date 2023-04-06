@@ -41,7 +41,7 @@ class FirebaseApp:
         credentials.refresh(request)
         return credentials.token
 
-    @env_wrapper
+    # @env_wrapper
     def send_notification(self, title: str, body: str, data: dict) -> None:
         """
         Accepts title and body strings, and will push it to a device,

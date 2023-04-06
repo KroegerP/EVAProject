@@ -1,7 +1,9 @@
 from __future__ import annotations
 import os
 import tkinter as tk
+from tkinter import messagebox
 from typing import TYPE_CHECKING, Union
+from database.mutations.mutation import archiveMedication
 from utils.data_manip import list_to_string
 from database.queries.query import getMedByName, getReminderById
 from scanBottle.editInfo import editInfo
@@ -46,6 +48,17 @@ def goBack(UIController: UIController):
     UIController.clearUI("ScanBottle")
     UIController.editBottleInfo()
     return
+
+
+def confirmDelete(UIController: UIController, medName: str, medId: int):
+    if messagebox.askyesno(
+        title=f"Archive {medName}?",
+        message=f"Are you sure you want to archive {medName}?",
+    ):
+        archiveMedication(UIController.conn, medId)
+        goBack(UIController)
+    else:
+        print("Canceled archive request")
 
 
 def individualEdit(
@@ -93,6 +106,12 @@ def individualEdit(
 
     go_back_btn = UI.NewExitBtn(
         master=UIController.canvas, text="Go Back", command=lambda: goBack(UIController)
+    )
+
+    archive_btn = UI.NewExitBtn(
+        master=UIController.canvas,
+        text="Archive",
+        command=lambda: confirmDelete(UIController, med.medName, med.id),
     )
 
     name_label = UI.newFrameLabel(button_frame, "Med Name")
@@ -162,7 +181,15 @@ def individualEdit(
     )
     UIController.canvasIds["ScanBottle"].append(
         UIController.canvas.create_window(
-            WINDOW_WIDTH / 1.8, WINDOW_HEIGHT / 2, window=button_frame, anchor=tk.CENTER
+            WINDOW_WIDTH_PADDING + 15,
+            WINDOW_HEIGHT_PADDING + 15,
+            window=archive_btn,
+            anchor=tk.SE,
+        )
+    )
+    UIController.canvasIds["ScanBottle"].append(
+        UIController.canvas.create_window(
+            WINDOW_WIDTH / 1.9, WINDOW_HEIGHT / 2, window=button_frame, anchor=tk.CENTER
         )
     )
     UIController.canvasIds["ScanBottle"].append(

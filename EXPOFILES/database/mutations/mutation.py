@@ -60,14 +60,7 @@ def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
     refillDateStr = newMedDict["refillDate"] if "refillDate" in newMedDict else None
     timesPerDay = newMedDict["timesPerDay"] if "timesPerDay" in newMedDict else None
     # folderPath = newMedDict["medName"] if "medName" in newMedDict else None
-    folderPath = f'EXPOFILES/meds/{medName}'
-    
-    print(medName)
-    print(dateFilled)
-    print(refillsLeft)
-    print(refillDateStr)
-    print(timesPerDay)
-    print(folderPath)
+    folderPath = f"EXPOFILES/meds/{medName}"
 
     sql = f"INSERT INTO public.medications \
             (medname, datefilled, refillsleft, refilldate, \
@@ -76,22 +69,24 @@ def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
             {refillsLeft}, '{refillDateStr}', '{timesPerDay}', '1', '{folderPath}', NOW());"
 
     data = executeQuery(conn, sql)
-    
+
     med: Medication = getMedByName(conn, medName)
-    
+
     if med is None:
         print("ERROR: Unable to query for new med, returning.")
         return
 
-    create_reminders = f"INSERT INTO public.weeklyreminders (medications_id) VALUES ({med.id});"
-            
+    create_reminders = (
+        f"INSERT INTO public.weeklyreminders (medications_id) VALUES ({med.id});"
+    )
+
     data = executeQuery(conn, create_reminders)
-    
+
     reminder = getReminderByMedId(conn, med.id)
-    
-    alterMedicine(conn, med, 'timesperweek_id', str(reminder.id))
-    
-    print('New medication added!')
+
+    alterMedicine(conn, med, "timesperweek_id", str(reminder.id))
+
+    print("New medication added!")
 
 
 def updateDaysPerWeek(
@@ -133,8 +128,8 @@ def alterMedicine(
                 continue
             else:
                 setattr(med, attr, newVal)
-                
-    print(f'TIMES PER WEEK ID {med.timesPerWeekId}')
+
+    print(f"TIMES PER WEEK ID {med.timesPerWeekId}")
 
     dateFilledStr: str = med.dateFilled.strftime("%Y-%m-%d")
     refillDateStr: str = med.refillDate.strftime("%Y-%m-%d")
@@ -154,7 +149,7 @@ def alterMedicine(
                     WHERE id = '{med.timesPerWeekId}'"
         else:
             print("ERROR GETTING REMINDERS DATA TO SET")
-    elif fieldToEdit == 'timesperweek_id':
+    elif fieldToEdit == "timesperweek_id":
         sql = f"UPDATE medications \
                 SET \
                 timesperweek_id = '{newVal}' \
@@ -172,7 +167,19 @@ def alterMedicine(
 
     if data == "0" or data is None:
         return {"errors": "Unable to update medication"}
-    
-    print(f'Updated {fieldToEdit} with {newVal}')
+
+    print(f"Updated {fieldToEdit} with {newVal}")
 
     return {fieldToEdit: newVal}
+
+
+def archiveMedication(conn: psycopg2.extensions.connection, medId: int):
+    sql = f"UPDATE public.medications \
+                SET archived=true \
+                WHERE id={medId};"
+
+    data = executeQuery(conn, sql)
+
+    print(data)
+
+    return

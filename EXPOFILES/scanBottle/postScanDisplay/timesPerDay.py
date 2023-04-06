@@ -85,7 +85,10 @@ def selectTimesPerDay(
     )
     UIController.canvasIds["ScanBottle"].append(
         UIController.canvas.create_window(
-            WINDOW_WIDTH / 2, WINDOW_PADDING, window=my_counter.frame, anchor=tk.N
+            WINDOW_WIDTH / 2,
+            WINDOW_HEIGHT / 2,
+            window=my_counter.frame,
+            anchor=tk.CENTER,
         )
     )
     return
