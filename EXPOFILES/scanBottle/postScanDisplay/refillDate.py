@@ -18,7 +18,6 @@ if TYPE_CHECKING:
 
 def nextStep(UIController: UIController, textList: list[str], newMed: dict):
     UIController.clearUI("ScanBottle")
-    # Next step here, probably dateFilled
     goToEdit(UIController, newMed)
 
 
