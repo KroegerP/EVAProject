@@ -37,7 +37,7 @@
 <h3 align="center">EVA 2.0</h3>
 
   <p align="center">
-    Software for the Everyone's Virtual Asisstant, a device for managing medication intake.
+    Software for the Everyone's Virtual Asisstant 2.0, a device for managing medication intake.
     <br />
     <a href="https://github.com/KroegerP/EVAProject"><strong>Explore the docs »</strong></a>
     <br />
