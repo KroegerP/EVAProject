@@ -66,7 +66,7 @@ def createMedFromDict(
     refillDateStr = newMedDict["refillDate"] if "refillDate" in newMedDict else None
     timesPerDay = newMedDict["timesPerDay"] if "timesPerDay" in newMedDict else None
     # folderPath = newMedDict["medName"] if "medName" in newMedDict else None
-    folderPath = f"EXPOFILES/meds/{medName}"
+    folderPath = f"EXPOFILES/database/meds/{medName}"
 
     print(medName)
     print(dateFilled)
@@ -91,9 +91,9 @@ def createMedFromDict(
 
     sql = f"INSERT INTO public.medications \
             (medname, datefilled, refillsleft, refilldate, \
-            timesperday , timesperweek_id , folderpath, created_at) \
+            timesperday, timesperweek_id, folderpath, created_at) \
             VALUES ('{medName}', '{dateFilled}',\
-            {refillsLeft}, '{refillDateStr}', '{timesPerDay}', '1', '{folderPath}', NOW());"
+            {refillsLeft}, '{refillDateStr}', '{timesPerDay}', '1','{folderPath}', NOW());"
 
     data = executeQuery(conn, sql)
 
@@ -112,6 +112,7 @@ def createMedFromDict(
     reminder = getReminderByMedId(conn, med.id)
 
     alterMedicine(conn, med, "timesperweek_id", str(reminder.id))
+    alterMedicine(conn, med, "folderpath", f"{folderPath}/{med.id}/")
 
     move_images(
         "EXPOFILES/database/new/",
@@ -187,6 +188,11 @@ def alterMedicine(
         sql = f"UPDATE medications \
                 SET \
                 timesperweek_id = '{newVal}' \
+                WHERE id = '{med.id}';"
+    elif fieldToEdit == "folderpath":
+        sql = f"UPDATE medications \
+                SET \
+                folderpath = '{newVal}' \
                 WHERE id = '{med.id}';"
     else:
         sql = f"UPDATE medications \
