@@ -56,7 +56,7 @@ def readSite(drugName: str) -> dict:
 
     if resp.status_code == 200:
         soup = BeautifulSoup(resp.text, "lxml")
-        # print(soup.prettify())
+        # print(soup.prettify()) # For debugging
 
         site_info["image_url"] = find_image(soup)
         site_info["dosage_text"] = get_dosage(soup)

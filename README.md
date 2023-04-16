@@ -80,7 +80,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]]()
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,6 +91,11 @@
 ### Built With
 
 * [Python](https://www.python.org/)
+* [OpenCV](https://pypi.org/project/opencv-python/)
+* [Google Speech API](https://pypi.org/project/SpeechRecognition/)
+* [Tkinter](https://docs.python.org/3/library/tkinter.html)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Google Firebase](https://firebase.google.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -98,11 +105,9 @@
 ## Getting Started
 
 There are a few prerequisites to installing EVA locally. Most of the initial setup can be 
-performed via the 4 scripts in the  
+performed via the installation scripts located in the `scripts` directory. 
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
 
 You must be in a linux environment for the install scripts to work.
 
@@ -110,7 +115,8 @@ Currently, camera and microphone functionality is limited to raspberry pi device
 
 You will need to download a certificate from the Google Firebase Project Page to complete the setup. These can be downloaded from [Firebase](https://console.firebase.google.com/u/0/project/elderly-virtual-assistant-2/settings/serviceaccounts/adminsdk)
 
-You will also need a .env file with the proper fields filled in. An example can be found in the code.
+You will also need a `.env` file with the proper fields filled in. An example can be found in the code, and specific keys and certs
+can be requested as-needed.
 
 ### Installation
 
@@ -142,25 +148,34 @@ You will also need a .env file with the proper fields filled in. An example can 
    ```
    ./scripts/6_fontAndAuth.sh
    ```
-8. Activate your virtual environment (If not started)
+9. Run the path builder script. This creates any paths for files that may be needed during normal functioning.
    ```sh
    source scripts/activate.sh
    ```
-9. More steps to come...
+10. Activate your virtual environment (If not started) - this should be done whenever starting development.
+   ```sh
+   source scripts/activate.sh
+   ```
+11. More steps to come...
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Troubleshooting
 
+If you're having file permission issues when running the scripts, just fun `chmod +wrx <PATH_TO_SCRIPT>` and that should fix it.
+
+You may need to install psycopg2 by installing the binary rather than the regular package.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+See the project google drive for examples and demos of the device. Users must request access from Peter Kroeger to access the google drive before being able to view the material.
+
+<!-- https://drive.google.com/drive/u/0/folders/1UNuWkN-WTi37VdnsqjsgtwzpGgliqYmj -->
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
 <!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
 
 
 <!-- ROADMAP -->
@@ -178,7 +193,7 @@ See the [open issues](https://github.com/KroegerP/EVAProject/issues) for a full 
 
 
 <!-- CONTRIBUTING -->
-<!-- ## Contributing
+## Contributing
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -189,7 +204,7 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -212,6 +227,8 @@ Cole Bower - cole327@frontier.com 812-614-9751
 
 Project Link: [https://github.com/KroegerP/EVAProject](https://github.com/KroegerP/EVAProject)
 
+Link to accompanying Mobile App: [https://github.com/KroegerP/flutter-mobile-app](https://github.com/KroegerP/flutter-mobile-app)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -219,7 +236,7 @@ Project Link: [https://github.com/KroegerP/EVAProject](https://github.com/Kroege
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* Original Code for EVA by Alex Davison - [https://github.com/alexdavison8999/EVAProject](https://github.com/alexdavison8999/EVAProject)
+* Original Code for EVA 1.0 by Alex Davison and Ram - [https://github.com/alexdavison8999/EVAProject](https://github.com/alexdavison8999/EVAProject)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
