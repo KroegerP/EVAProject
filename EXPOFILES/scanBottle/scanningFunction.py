@@ -16,7 +16,7 @@ import utils.interfaceHelpers as UI
 
 if TYPE_CHECKING:
     from UIController import UIController
-    
+
 textLines = []
 
 
@@ -53,21 +53,17 @@ def save_image(temp_name: str, cur_img: Image) -> str:
 
 def captureImage(UIController: UIController, camera: CV2Camera):
     global textLines
-    
+
     num_photos = increment_image_count(UIController)
 
     cur_img = camera.get_image()
 
-    # file_path = save_image(num_photos, cur_img)
-
     file_path = camera.save_image(num_photos, cur_img)
-
-    # parsed_text = parse_image(file_path)
 
     parsed_text = camera.parse_image(file_path)
 
     print(parsed_text)
-    
+
     textLines.extend(parsed_text)
 
     print("Click!")
@@ -79,10 +75,10 @@ def goToEdit(UIController: UIController, camera: Optional[CV2Camera] = None):
     print("Going to med info edit")
     if on_rpi() and camera is not None:
         camera.stop_camera()
-        
+
     if len(textLines) == 0:
-        textLines = ['No Text Scanned']
-    UIController.clearUI('ScanBottle')
+        textLines = ["No Text Scanned"]
+    UIController.clearUI("ScanBottle")
     selectMedName(UIController, textList=textLines)
     return
 
@@ -106,9 +102,6 @@ def scanningFunction(UIController: UIController):
 
     # Check if we're on the raspberry pi or not
     if on_rpi():
-        # camera: Camera = UIController.start_camera()
-
-        # UIController.run_camera(camera)
         camera = CV2Camera(UIController.canvas)
         UIController.canvasIds["ScanBottle"].append(
             UIController.canvas.create_window(

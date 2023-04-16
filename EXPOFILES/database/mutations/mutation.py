@@ -2,6 +2,8 @@ import os
 import psycopg2
 import psycopg2.extensions
 import psycopg2.errors
+
+from utils.fileHandler import delete_images, move_images
 from utils.firebase.firebase import FirebaseApp
 from database.classes.medications import Medication
 from database.queries.query import getMedByName, getReminderById, getReminderByMedId
@@ -110,6 +112,13 @@ def createMedFromDict(
     reminder = getReminderByMedId(conn, med.id)
 
     alterMedicine(conn, med, "timesperweek_id", str(reminder.id))
+
+    move_images(
+        "EXPOFILES/database/new/",
+        med.id,
+        med.medName,
+    )
+    delete_images("EXPOFILES/database/new")
 
     print("New medication added!")
 
