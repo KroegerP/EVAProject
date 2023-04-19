@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.2 (Ubuntu 15.2-1.pgdg22.04+1)
--- Dumped by pg_dump version 15.2 (Ubuntu 15.2-1.pgdg22.04+1)
+-- Dumped from database version 15.2 (Ubuntu 15.2-1.pgdg20.04+1)
+-- Dumped by pg_dump version 15.2 (Ubuntu 15.2-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -309,12 +309,10 @@ COPY public.confirmations (id, medname, taken, medicationid, created_at) FROM st
 
 COPY public.medications (id, medname, datefilled, refillsleft, refilldate, timesperday, timesperweek_id, folderpath, created_at, archived) FROM stdin;
 3	Ibuprofen	2023-02-11	1	2023-02-13	5	1	./EXPOFILES/database/meds/Ibuprofen/3/	2023-02-11	f
-1	med	2023-02-11	2	2023-02-11	2	2	meds/med/1/	2023-02-11	f
-7	Ciprofloxacin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Ciprofloxacin/7/	2023-04-05	f
-10	Rosuvastatin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Rosuvastatin/10/	2023-04-05	f
-8	metroNIDAZOLE	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/metroNIDAZOLE/8/	2023-04-05	f
-9	Tamsulosin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Tamsulosin/9/	2023-04-05	f
-11	Unknown	2023-01-01	1	2023-01-01	1	3	EXPOFILES/meds/Unknown	2023-04-05	f
+7	Ciprofloxacin	2022-03-11	0	2022-03-11	2	5	./EXPOFILES/database/meds/Ciprofloxacin/7/	2023-04-05	f
+10	Rosuvastatin	2022-03-11	0	2022-03-11	2	8	./EXPOFILES/database/meds/Rosuvastatin/10/	2023-04-05	f
+8	metroNIDAZOLE	2022-03-11	0	2022-03-11	2	6	./EXPOFILES/database/meds/metroNIDAZOLE/8/	2023-04-05	f
+9	Tamsulosin	2022-03-11	0	2022-03-11	2	7	./EXPOFILES/database/meds/Tamsulosin/9/	2023-04-05	f
 \.
 
 
@@ -451,9 +449,11 @@ COPY public.reportmetrics (id, medid, reminderid, timetaken, askedaftertakencoun
 --
 
 COPY public.weeklyreminders (id, medications_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday) FROM stdin;
-2	1	t	t	t	t	t	t	t
 1	3	t	f	t	f	t	f	f
-3	11	t	t	t	t	t	t	t
+5	7	t	t	t	f	t	t	t
+6	8	f	t	t	t	t	t	t
+7	9	t	t	f	t	t	t	t
+8	10	t	t	t	t	t	f	f
 \.
 
 
@@ -482,7 +482,7 @@ SELECT pg_catalog.setval('public.weeklyreminders_id_seq', 1, false);
 -- Name: weeklyreminders_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: evadb
 --
 
-SELECT pg_catalog.setval('public.weeklyreminders_id_seq1', 3, true);
+SELECT pg_catalog.setval('public.weeklyreminders_id_seq1', 8, true);
 
 
 --
@@ -585,7 +585,7 @@ ALTER TABLE ONLY public.reportmetrics
 --
 
 ALTER TABLE ONLY public.weeklyreminders
-    ADD CONSTRAINT weeklyreminders_fk FOREIGN KEY (medications_id) REFERENCES public.medications(id);
+    ADD CONSTRAINT weeklyreminders_fk FOREIGN KEY (medications_id) REFERENCES public.medications(id) ON DELETE CASCADE;
 
 
 --
