@@ -220,14 +220,14 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Peter Kroeger - [@HeyDotPeter](https://twitter.com/HeyDotPeter) - peter14mail@gmail.com
-Ryan Kunkel - ryanjkunkel@gmail.com - 513-515-8966
-Konstantinos Papadopoulos-Frietchen - kostisdabess@gmail.com 440-832-9004
-Cole Bower - cole327@frontier.com 812-614-9751
+* Peter Kroeger - [@HeyDotPeter](https://twitter.com/HeyDotPeter) - peter14mail@gmail.com
+* Ryan Kunkel - ryanjkunkel@gmail.com - 513-515-8966
+* Konstantinos Papadopoulos-Frietchen - kostisdabess@gmail.com 440-832-9004
+* Cole Bower - cole327@frontier.com 812-614-9751
 
-Project Link: [https://github.com/KroegerP/EVAProject](https://github.com/KroegerP/EVAProject)
+EVA Home (This): [https://github.com/KroegerP/EVAProject](https://github.com/KroegerP/EVAProject)
 
-Link to accompanying Mobile App: [https://github.com/KroegerP/flutter-mobile-app](https://github.com/KroegerP/flutter-mobile-app)
+EVA Mobile App: [https://github.com/KroegerP/flutter-mobile-app](https://github.com/KroegerP/flutter-mobile-app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
