@@ -44,7 +44,7 @@ def selectTimesPerDay(
         UIController.canvas,
         text="How many times per day should you take this?",
         font=(TEXT_FONT, 32, "bold"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     my_counter = Counter(UIController.canvas, curVal=1)

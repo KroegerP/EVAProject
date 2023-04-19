@@ -44,7 +44,7 @@ def selectRefillsLeft(
         UIController.canvas,
         text="How many refills do you have left?",
         font=(TEXT_FONT, 32, "bold"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     my_counter = Counter(UIController.canvas, curVal=1)

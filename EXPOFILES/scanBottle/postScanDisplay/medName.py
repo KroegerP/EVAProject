@@ -46,7 +46,7 @@ def selectMedName(
         UIController.canvas,
         text="Which line from the bottle is\nthe Medication Name?\nClick Continue if none match.",
         font=(TEXT_FONT, 32, "bold"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     label_frame = tk.Frame(UIController.canvas, background=os.getenv("PRIMARY_COLOR"))

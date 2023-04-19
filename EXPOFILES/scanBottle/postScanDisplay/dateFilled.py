@@ -62,7 +62,7 @@ def selectDateFilled(
         UIController.canvas,
         text="What day did you fill this?",
         font=(TEXT_FONT, 32, "bold"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     label_frame = tk.Frame(UIController.canvas, background=os.getenv("PRIMARY_COLOR"))

@@ -43,7 +43,7 @@ def ConfirmationButtons(
         fg="#ffffff",
         command=command,
         height=height,
-        width=width
+        width=width,
     )
 
 
@@ -70,7 +70,7 @@ def evaText(
     name: str,
     canvas: tk.Canvas,
     text="Default",
-    background=PRIMARY_COLOR,
+    background=os.getenv("PRIMARY_COLOR"),
     fg=TEXT_COLOR,
     font=TEXT_FONT,
 ) -> tk.Label:
@@ -100,7 +100,9 @@ def evaFace(
     return eva_label
 
 
-def clockText(root: tk.Tk, text="", font=("Roboto", 24), fg="black", bg=PRIMARY_COLOR):
+def clockText(
+    root: tk.Tk, text="", font=("Roboto", 24), fg="black", bg=os.getenv("PRIMARY_COLOR")
+):
     return tk.Label(root, text=text, font=font, fg=fg, bg=bg)
 
 
