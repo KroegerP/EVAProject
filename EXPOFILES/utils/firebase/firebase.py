@@ -12,7 +12,12 @@ from constants.auth import *
 
 class FirebaseApp:
     def __init__(self):
-        self.cred = credentials.Certificate(CERT_PATH)
+        creds = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", None)
+        if creds is None:
+            raise ValueError(
+                "Credentials path is not defined in .env, or the dotenv package did not load the file correctly."
+            )
+        self.cred = credentials.Certificate(creds)
         self.default_app = firebase_admin.initialize_app()
         self.messaging = firebase_admin.messaging
         self.scopes = ["https://www.googleapis.com/auth/firebase.messaging"]

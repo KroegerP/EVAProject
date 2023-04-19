@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.2 (Ubuntu 15.2-1.pgdg22.04+1)
+-- Dumped from database version 14.7 (Ubuntu 14.7-1.pgdg22.04+1)
 -- Dumped by pg_dump version 15.2 (Ubuntu 15.2-1.pgdg22.04+1)
 
 SET statement_timeout = 0;
@@ -272,34 +272,56 @@ ALTER TABLE ONLY public.weeklyreminders ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 COPY public.confirmations (id, medname, taken, medicationid, created_at) FROM stdin;
-19	Ibuprofen	f	3	2023-04-05 08:05:00
-20	Ibuprofen	f	3	2023-04-01 10:33:00
-21	Ibuprofen	t	3	2023-03-31 05:32:00
-22	Ibuprofen	f	3	2023-04-05 07:25:00
-23	Ibuprofen	t	3	2023-04-02 02:41:00
-24	Ibuprofen	f	3	2023-04-04 11:19:00
-25	Ibuprofen	t	3	2023-04-02 10:27:00
-26	Ibuprofen	f	3	2023-04-03 05:53:00
-27	Ibuprofen	t	3	2023-04-02 02:30:00
-28	Ibuprofen	t	3	2023-04-05 03:32:00
-29	Ibuprofen	t	3	2023-04-04 06:38:00
-30	Ibuprofen	f	3	2023-04-02 09:08:00
-31	Ibuprofen	f	3	2023-04-03 10:19:00
-32	Ibuprofen	t	3	2023-04-02 08:42:00
-33	Ibuprofen	t	3	2023-04-02 02:55:00
-34	Ibuprofen	t	3	2023-03-31 03:17:00
-35	Ibuprofen	t	3	2023-04-04 04:25:00
-36	Ibuprofen	t	3	2023-04-05 06:28:00
-37	Ibuprofen	f	3	2023-04-04 04:41:00
-38	Ibuprofen	t	3	2023-04-05 14:23:00
-18	Ciprofloxacin	t	7	2023-04-05 19:36:54.961903
-39	Ibuprofen	t	3	2023-04-05 19:53:55.355875
-40	Ibuprofen	t	3	2023-04-05 19:54:38.268627
-41	Ibuprofen	t	3	2023-04-05 19:54:53.924113
-42	Ibuprofen	f	3	2023-04-05 19:57:19.826475
-43	Ibuprofen	f	3	2023-04-05 19:57:29.876355
-44	Ciprofloxacin	f	7	2023-04-05 20:05:43.531379
-45	Ciprofloxacin	t	7	2023-04-05 20:06:13.383474
+33	Ibuprofen	t	3	2023-02-24 14:11:57.752095
+34	med	t	1	2023-02-24 14:12:42.584619
+35	med	f	1	2023-02-24 14:12:44.822107
+19	Ibuprofen	t	3	2023-02-17 12:15:00
+15	Ibuprofen	t	3	2023-02-13 08:00:00
+36	Ibuprofen	t	3	2023-02-24 15:37:09.652336
+37	Ibuprofen	t	3	2023-02-24 15:38:52.849116
+38	Ibuprofen	t	3	2023-02-24 15:38:54.749993
+39	Ibuprofen	f	3	2023-02-25 14:03:43.545663
+40	Ibuprofen	t	3	2023-03-04 13:13:05.805439
+41	Ibuprofen	t	3	2023-03-06 17:59:56.084346
+42	Ibuprofen	t	3	2023-03-06 18:00:47.268853
+43	Ibuprofen	t	3	2023-03-06 18:01:01.034343
+44	Ibuprofen	f	3	2023-03-06 18:01:13.465825
+45	Ibuprofen	t	3	2023-03-06 18:19:34.276657
+46	Ibuprofen	t	3	2023-03-06 18:20:13.418637
+47	Ibuprofen	t	3	2023-03-06 18:20:57.860485
+48	Ibuprofen	t	3	2023-03-06 18:21:27.871102
+49	Ibuprofen	t	3	2023-03-06 18:22:19.700944
+50	Ibuprofen	t	3	2023-03-06 19:03:10.258371
+51	Ibuprofen	t	3	2023-03-06 19:07:32.533981
+52	Ibuprofen	t	3	2023-03-06 19:08:11.86493
+53	Ibuprofen	t	3	2023-03-06 19:10:40.765659
+54	Ibuprofen	t	3	2023-03-06 19:11:02.395689
+55	Ibuprofen	f	3	2023-03-06 19:11:06.201126
+56	Ibuprofen	t	3	2023-03-06 19:11:39.079593
+57	Ibuprofen	t	3	2023-03-09 15:48:31.275578
+58	Ibuprofen	f	3	2023-03-09 20:59:38.571895
+59	Ibuprofen	f	3	2023-03-10 12:37:31.357357
+60	Ibuprofen	f	3	2023-03-12 14:56:16.122032
+61	Ibuprofen	t	3	2023-03-14 00:03:30.264458
+62	Ibuprofen	t	3	2023-03-14 00:36:47.036669
+63	Ibuprofen	f	3	2023-03-20 15:50:22.311071
+64	Ibuprofen	f	3	2023-03-20 16:08:13.800972
+65	Ibuprofen	f	3	2023-03-20 16:12:50.848782
+66	Ibuprofen	t	3	2023-03-28 14:49:41.881318
+67	Ibuprofen	t	3	2023-03-28 14:51:17.627089
+68	Ibuprofen	t	3	2023-03-28 14:51:28.139858
+69	Ibuprofen	t	3	2023-03-29 15:45:55.83598
+70	Ibuprofen	t	3	2023-03-29 16:18:40.57316
+71	Ibuprofen	t	3	2023-03-29 16:18:46.58754
+72	Ibuprofen	t	3	2023-03-29 16:21:06.339397
+73	Ibuprofen	t	3	2023-04-02 12:02:17.754429
+74	Ibuprofen	t	3	2023-04-02 12:05:12.437573
+75	Ibuprofen	t	3	2023-04-02 12:52:02.483331
+76	Ibuprofen	t	3	2023-04-05 15:53:22.21718
+77	Ciprofloxacin	t	7	2023-04-05 15:54:14.927538
+78	Rosuvastatin	t	10	2023-04-05 15:54:21.625403
+79	Ibuprofen	t	3	2023-04-05 15:54:26.697306
+80	Ciprofloxacin	t	7	2023-04-05 15:54:42.212044
 \.
 
 
@@ -308,13 +330,12 @@ COPY public.confirmations (id, medname, taken, medicationid, created_at) FROM st
 --
 
 COPY public.medications (id, medname, datefilled, refillsleft, refilldate, timesperday, timesperweek_id, folderpath, created_at, archived) FROM stdin;
-3	Ibuprofen	2023-02-11	1	2023-02-13	5	1	./EXPOFILES/database/meds/Ibuprofen/3/	2023-02-11	f
 1	med	2023-02-11	2	2023-02-11	2	2	meds/med/1/	2023-02-11	f
-7	Ciprofloxacin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Ciprofloxacin/7/	2023-04-05	f
-10	Rosuvastatin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Rosuvastatin/10/	2023-04-05	f
-8	metroNIDAZOLE	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/metroNIDAZOLE/8/	2023-04-05	f
+3	Ibuprofen	2023-02-11	1	2023-02-13	5	1	./EXPOFILES/database/meds/Ibuprofen/3/	2023-02-11	f
 9	Tamsulosin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Tamsulosin/9/	2023-04-05	f
-11	Unknown	2023-01-01	1	2023-01-01	1	3	EXPOFILES/meds/Unknown	2023-04-05	f
+8	metroNIDAZOLE	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/metroNIDAZOLE/8/	2023-04-05	f
+10	Rosuvastatin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Rosuvastatin/10/	2023-04-05	f
+7	Ciprofloxacin	2022-03-11	0	2022-03-11	2	1	./EXPOFILES/database/meds/Ciprofloxacin/7/	2023-04-05	f
 \.
 
 
@@ -411,22 +432,6 @@ COPY public.medicines (id, name) FROM stdin;
 6	Ciprofloxacin
 7	metroNIDAZOLE
 8	METFORMIN HCL
-1	ROSUVASTATIN
-2	Tamsulosin Hcl
-3	Cyclobenzaprine
-4	Docusate sodium
-5	Ibuprofen Tablet
-6	Ciprofloxacin
-7	metroNIDAZOLE
-8	METFORMIN HCL
-1	ROSUVASTATIN
-2	Tamsulosin Hcl
-3	Cyclobenzaprine
-4	Docusate sodium
-5	Ibuprofen Tablet
-6	Ciprofloxacin
-7	metroNIDAZOLE
-8	METFORMIN HCL
 \.
 
 
@@ -453,7 +458,6 @@ COPY public.reportmetrics (id, medid, reminderid, timetaken, askedaftertakencoun
 COPY public.weeklyreminders (id, medications_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday) FROM stdin;
 2	1	t	t	t	t	t	t	t
 1	3	t	f	t	f	t	f	f
-3	11	t	t	t	t	t	t	t
 \.
 
 
@@ -461,14 +465,14 @@ COPY public.weeklyreminders (id, medications_id, monday, tuesday, wednesday, thu
 -- Name: confirmations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: evadb
 --
 
-SELECT pg_catalog.setval('public.confirmations_id_seq', 45, true);
+SELECT pg_catalog.setval('public.confirmations_id_seq', 80, true);
 
 
 --
 -- Name: medications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: evadb
 --
 
-SELECT pg_catalog.setval('public.medications_id_seq', 11, true);
+SELECT pg_catalog.setval('public.medications_id_seq', 10, true);
 
 
 --
@@ -482,7 +486,7 @@ SELECT pg_catalog.setval('public.weeklyreminders_id_seq', 1, false);
 -- Name: weeklyreminders_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: evadb
 --
 
-SELECT pg_catalog.setval('public.weeklyreminders_id_seq1', 3, true);
+SELECT pg_catalog.setval('public.weeklyreminders_id_seq1', 2, true);
 
 
 --
@@ -545,7 +549,7 @@ ALTER TABLE ONLY public.weeklyreminders
 --
 
 ALTER TABLE ONLY public.confirmations
-    ADD CONSTRAINT confirmations_fk FOREIGN KEY (medicationid) REFERENCES public.medications(id) ON DELETE CASCADE;
+    ADD CONSTRAINT confirmations_fk FOREIGN KEY (medicationid) REFERENCES public.medications(id);
 
 
 --
