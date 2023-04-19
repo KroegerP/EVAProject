@@ -7,8 +7,6 @@ from google.oauth2.service_account import Credentials
 from google.auth.transport.requests import Request
 from utils.wrappers import env_wrapper
 
-from constants.auth import *
-
 
 class FirebaseApp:
     def __init__(self):
