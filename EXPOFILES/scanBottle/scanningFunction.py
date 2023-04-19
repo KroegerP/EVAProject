@@ -97,7 +97,7 @@ def scanningFunction(UIController: UIController):
         master=UIController.canvas,
         name="!labelNumPhotos",
         text=f"Photos taken: 0",
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     # Check if we're on the raspberry pi or not

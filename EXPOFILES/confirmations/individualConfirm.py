@@ -55,7 +55,7 @@ def individualConfirm(
     confirm_label = tk.Label(
         text=f"Have you taken your {medName}?",
         font=(TEXT_FONT, 55, "normal"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     no_btn = UI.ConfirmationButtons(

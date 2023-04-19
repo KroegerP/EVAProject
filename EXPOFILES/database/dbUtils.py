@@ -4,9 +4,8 @@ import dotenv
 import psycopg2
 import psycopg2.extensions
 
-from constants.database import *
-
 dotenv.load_dotenv()
+
 
 def connectToEvaDB(
     host: str = os.getenv("PG_HOST"),

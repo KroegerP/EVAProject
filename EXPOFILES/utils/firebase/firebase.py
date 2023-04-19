@@ -7,8 +7,6 @@ from google.oauth2.service_account import Credentials
 from google.auth.transport.requests import Request
 from utils.wrappers import env_wrapper
 
-from constants.auth import *
-
 
 class FirebaseApp:
     def __init__(self):
@@ -39,7 +37,7 @@ class FirebaseApp:
 
         :return: Access token.
         """
-        service_data_path = CERT_PATH
+        service_data_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", None)
 
         credentials: Credentials = Credentials.from_service_account_file(
             filename=service_data_path, scopes=self.scopes

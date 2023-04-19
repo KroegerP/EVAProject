@@ -60,7 +60,7 @@ def selectRefillDate(
         UIController.canvas,
         text="When will you refill this?",
         font=(TEXT_FONT, 32, "bold"),
-        background=PRIMARY_COLOR,
+        background=os.getenv("PRIMARY_COLOR"),
     )
 
     label_frame = tk.Frame(UIController.canvas, background=os.getenv("PRIMARY_COLOR"))

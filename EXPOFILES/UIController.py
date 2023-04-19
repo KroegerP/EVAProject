@@ -69,7 +69,7 @@ class UIController:
             self.root,
             width=WINDOW_WIDTH,
             height=WINDOW_HEIGHT,
-            background=PRIMARY_COLOR,
+            background=os.getenv("PRIMARY_COLOR"),
         )
         self.canvas.pack(fill="both", expand=True)
 

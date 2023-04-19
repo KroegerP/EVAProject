@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import os
 import tkinter as tk
 from typing import TYPE_CHECKING
 
@@ -22,13 +23,13 @@ def individualDrug(UIController: UIController, medName: str) -> None:
     med_label = tk.Label(
         UIController.canvas,
         text=f"{medName}",
-        bg=PRIMARY_COLOR,
+        bg=os.getenv("PRIMARY_COLOR"),
         font=(TEXT_FONT, 40, "normal"),
     )
     desc_text = tk.Label(
         UIController.canvas,
         text=f'{site_info["siteText"]}',
-        bg=PRIMARY_COLOR,
+        bg=os.getenv("PRIMARY_COLOR"),
         font=(TEXT_FONT, 20, "normal"),
         wraplength=750,
         justify="left",
@@ -36,7 +37,7 @@ def individualDrug(UIController: UIController, medName: str) -> None:
     dosage_text = tk.Label(
         UIController.canvas,
         text=f'{site_info["dosage_text"]}',
-        bg=PRIMARY_COLOR,
+        bg=os.getenv("PRIMARY_COLOR"),
         font=(TEXT_FONT, 20, "normal"),
         wraplength=750,
         justify="left",
@@ -44,7 +45,7 @@ def individualDrug(UIController: UIController, medName: str) -> None:
     meta_label = tk.Label(
         UIController.canvas,
         text="Sourced from Drugs.com",
-        bg=PRIMARY_COLOR,
+        bg=os.getenv("PRIMARY_COLOR"),
         font=(TEXT_FONT, 15, "normal"),
     )
 
@@ -66,7 +67,7 @@ def individualDrug(UIController: UIController, medName: str) -> None:
         image_text = tk.Label(
             UIController.canvas,
             text=f"Pill of {medName}",
-            bg=PRIMARY_COLOR,
+            bg=os.getenv("PRIMARY_COLOR"),
             font=(TEXT_FONT, 20, "normal"),
         )
 

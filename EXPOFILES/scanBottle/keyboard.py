@@ -24,7 +24,7 @@ class Keyboard:
     def create_keyboard(self):
         # Create frame to hold keyboard buttons
         self.keyboard_frame = tk.Frame(
-            self.root, name="!keyboard_frame", background=PRIMARY_COLOR
+            self.root, name="!keyboard_frame", background=os.getenv("PRIMARY_COLOR")
         )
         self.keyboard_frame.grid(row=1, column=0)
 
