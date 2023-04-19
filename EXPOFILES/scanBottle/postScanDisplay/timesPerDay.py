@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING, Union
 from scanBottle.postScanDisplay.refillDate import selectRefillDate
 from scanBottle.counter import Counter
 
-from database.mutations.mutation import createMedFromDict
-from database.classes.medications import Medication
 from scanBottle.postScanDisplay.utility import goToEdit
 
 from constants.colors import *
