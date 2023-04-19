@@ -4,8 +4,6 @@ import os
 import tkinter as tk
 from typing import TYPE_CHECKING, Union
 
-from database.mutations.mutation import createMedFromDict
-from database.classes.medications import Medication
 from scanBottle.postScanDisplay.utility import buildDateField, goToEdit
 
 from constants.colors import *
@@ -18,7 +16,6 @@ if TYPE_CHECKING:
 
 def nextStep(UIController: UIController, textList: list[str], newMed: dict):
     UIController.clearUI("ScanBottle")
-    # Next step here, probably dateFilled
     goToEdit(UIController, newMed)
 
 

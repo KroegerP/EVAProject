@@ -5,8 +5,6 @@ import tkinter as tk
 from typing import TYPE_CHECKING, Union
 
 from scanBottle.postScanDisplay.dateFilled import selectDateFilled
-from database.mutations.mutation import createMedFromDict
-from database.classes.medications import Medication
 from scanBottle.postScanDisplay.utility import goToEdit
 
 from constants.colors import *
@@ -24,10 +22,10 @@ def nextStep(UIController: UIController, textList: list[str], newMed: dict):
 
 
 def selectOption(
-    UIController: UIController, textList: list[str], newMed: dict, index: int=-1
+    UIController: UIController, textList: list[str], newMed: dict, index: int = -1
 ):
     if index < 0:
-        print('No option selected, continuing workflow.')
+        print("No option selected, continuing workflow.")
     else:
         print(f"Selected text for med name: {textList[index]}")
         newMed["medName"] = textList[index].strip().title()
@@ -93,7 +91,10 @@ def selectMedName(
     )
     UIController.canvasIds["ScanBottle"].append(
         UIController.canvas.create_window(
-            WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.75, window=button_frame, anchor=tk.CENTER
+            WINDOW_WIDTH / 2,
+            WINDOW_HEIGHT / 1.75,
+            window=button_frame,
+            anchor=tk.CENTER,
         )
     )
     UIController.canvasIds["ScanBottle"].append(

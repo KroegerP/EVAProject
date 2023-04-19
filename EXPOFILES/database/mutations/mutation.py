@@ -1,6 +1,10 @@
+import os
 import psycopg2
 import psycopg2.extensions
 import psycopg2.errors
+
+from utils.fileHandler import delete_images, move_images
+from utils.firebase.firebase import FirebaseApp
 from database.classes.medications import Medication
 from database.queries.query import getMedByName, getReminderById, getReminderByMedId
 from datetime import datetime
@@ -49,7 +53,9 @@ def createMedicine(
     return
 
 
-def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
+def createMedFromDict(
+    conn: psycopg2.extensions.connection, newMedDict: dict, firebase: FirebaseApp
+):
     medName = newMedDict["medName"] if "medName" in newMedDict else None
     dateFilled = (
         newMedDict["dateFilled"]
@@ -60,13 +66,34 @@ def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
     refillDateStr = newMedDict["refillDate"] if "refillDate" in newMedDict else None
     timesPerDay = newMedDict["timesPerDay"] if "timesPerDay" in newMedDict else None
     # folderPath = newMedDict["medName"] if "medName" in newMedDict else None
-    folderPath = f"EXPOFILES/database/meds/Ibuprofen"
+    folderPath = f"EXPOFILES/database/meds/{medName}"
+
+    print(medName)
+    print(dateFilled)
+    print(refillsLeft)
+    print(refillDateStr)
+    print(timesPerDay)
+    print(folderPath)
+
+    if os.getenv("DB_LOCATION", None) == "firestore" and firebase is not None:
+        firebase.add_medication_by_user_id(
+            {
+                "medname": medName,
+                "priority": 1,
+                "refill_date": refillDateStr,
+                "initial_pill_count": 0,
+                "amount_per_use": 2,
+                "times_per_day": timesPerDay,
+                "times_per_week": ["Monday", "Wednesday", "Friday"],
+                "date_added": dateFilled,
+            }
+        )
 
     sql = f"INSERT INTO public.medications \
             (medname, datefilled, refillsleft, refilldate, \
-            timesperday , timesperweek_id , folderpath, created_at) \
+            timesperday, timesperweek_id, folderpath, created_at) \
             VALUES ('{medName}', '{dateFilled}',\
-            {refillsLeft}, '{refillDateStr}', '{timesPerDay}', '1', '{folderPath}', NOW());"
+            {refillsLeft}, '{refillDateStr}', '{timesPerDay}', '1','{folderPath}', NOW());"
 
     data = executeQuery(conn, sql)
 
@@ -85,6 +112,14 @@ def createMedFromDict(conn: psycopg2.extensions.connection, newMedDict: dict):
     reminder = getReminderByMedId(conn, med.id)
 
     alterMedicine(conn, med, "timesperweek_id", str(reminder.id))
+    alterMedicine(conn, med, "folderpath", f"{folderPath}/{med.id}/")
+
+    move_images(
+        "EXPOFILES/database/new/",
+        med.id,
+        med.medName,
+    )
+    delete_images("EXPOFILES/database/new")
 
     print("New medication added!")
 
@@ -153,6 +188,11 @@ def alterMedicine(
         sql = f"UPDATE medications \
                 SET \
                 timesperweek_id = '{newVal}' \
+                WHERE id = '{med.id}';"
+    elif fieldToEdit == "folderpath":
+        sql = f"UPDATE medications \
+                SET \
+                folderpath = '{newVal}' \
                 WHERE id = '{med.id}';"
     else:
         sql = f"UPDATE medications \

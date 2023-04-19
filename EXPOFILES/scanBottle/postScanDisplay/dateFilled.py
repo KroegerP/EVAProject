@@ -5,8 +5,6 @@ import tkinter as tk
 from typing import TYPE_CHECKING, Union
 from scanBottle.postScanDisplay.refillsLeft import selectRefillsLeft
 
-from database.mutations.mutation import createMedFromDict
-from database.classes.medications import Medication
 from scanBottle.postScanDisplay.utility import buildDateField, goToEdit
 
 from constants.colors import *

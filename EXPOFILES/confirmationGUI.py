@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 medIndexStart = 0
 medIndexEnd = 4
 
+
 def goToCommand(UIController, medName, medId, filePath):
     UIController.clearUI("Confirm")
     print("Click")
@@ -34,9 +35,10 @@ def goBack(UIController: UIController):
     # clearLocalUI(UIController.canvas, ui_ids)
     UIController.goToHome()
 
+
 def updateGrid(UIController: UIController, displayedMedications: list[Medication]):
     myButtons = UIController.canvas.nametowidget(name="buttonFrame")
-    for index in range(0,4):
+    for index in range(0, 4):
         widget = myButtons.grid_slaves(row=index, column=0)[0]
         med = displayedMedications[index]
         widget.configure(text=med.medName)
@@ -47,13 +49,15 @@ def updateGrid(UIController: UIController, displayedMedications: list[Medication
                 UIController,
                 med.medName,
                 med.id,
-                (med.folderPath + med.medName + ".png") if med.medName in ['Ciprofloxacin', 'metroNIDAZOLE', 'Rosuvastatin', 'Ibuprofen',  'Tamsulosin'] else 'EXPOFILES/database/meds/Ibuprofen/3/Ibuprofen.png',
-            ))
+                (med.folderPath + med.medName + ".png"),
+            ),
+        )
 
     UIController.root.update()
 
-def iterateForward(UIController: UIController, medications : list[Medication]):
-    #iterate list forward 4
+
+def iterateForward(UIController: UIController, medications: list[Medication]):
+    # iterate list forward 4
     global medIndexStart
     global medIndexEnd
     if (medIndexEnd + 1) <= len(medications):
@@ -61,6 +65,7 @@ def iterateForward(UIController: UIController, medications : list[Medication]):
         medIndexEnd += 1
     dispalyedMedications = medications[medIndexStart:medIndexEnd]
     updateGrid(UIController, dispalyedMedications)
+
 
 def iterateBackwards(UIController: UIController, medications: list[Medication]):
     global medIndexStart
@@ -84,7 +89,10 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
         medications = UIController.confirmDict[confirm_key]
 
         button_frame = tk.Frame(
-            UIController.canvas, background=os.getenv("PRIMARY_COLOR"), border=1, name="buttonFrame"
+            UIController.canvas,
+            background=os.getenv("PRIMARY_COLOR"),
+            border=1,
+            name="buttonFrame",
         )
         button_frame.grid(row=0, column=0, sticky="e", rowspan=len(medications))
 
@@ -102,13 +110,16 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
 
         medications = medicationsQuery(UIController.conn)
 
-        if(len(medications) < 4):
+        if len(medications) < 4:
             displayedMedications = medications
         else:
             displayedMedications = medications[medIndexStart:medIndexEnd]
 
         button_frame = tk.Frame(
-            UIController.canvas, background=os.getenv("PRIMARY_COLOR"), border=1, name="buttonFrame"
+            UIController.canvas,
+            background=os.getenv("PRIMARY_COLOR"),
+            border=1,
+            name="buttonFrame",
         )
         button_frame.grid(row=0, column=0, sticky="e", rowspan=4)
 
@@ -121,7 +132,7 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
                     UIController,
                     med.medName,
                     med.id,
-                    (med.folderPath + med.medName + ".png") if med.medName in ['Ciprofloxacin', 'metroNIDAZOLE', 'Rosuvastatin', 'Ibuprofen',  'Tamsulosin'] else 'EXPOFILES/database/meds/Ibuprofen/3/Ibuprofen.png',
+                    (med.folderPath + med.medName + ".png"),
                 ),
             ).grid(row=index, column=0, pady=GRID_PADDING)
 
@@ -151,7 +162,7 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
         command=functools.partial(iterateForward, UIController, medications),
         bg="#F44336",
         font=(TEXT_FONT, 48, "normal"),
-        fg="#ffffff"
+        fg="#ffffff",
     )
 
     iterateBackwardsButton = tk.Button(
@@ -160,7 +171,7 @@ def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00")
         command=functools.partial(iterateBackwards, UIController, medications),
         bg="#F44336",
         font=(TEXT_FONT, 48, "normal"),
-        fg="#ffffff"
+        fg="#ffffff",
     )
 
     go_back_btn = UI.NewExitBtn(

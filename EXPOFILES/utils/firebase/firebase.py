@@ -1,7 +1,8 @@
 import os
+from typing import Any
 import firebase_admin
 import firebase_admin.messaging
-from firebase_admin import credentials
+from firebase_admin import credentials, firestore
 from google.oauth2.service_account import Credentials
 from google.auth.transport.requests import Request
 from utils.wrappers import env_wrapper
@@ -15,6 +16,7 @@ class FirebaseApp:
         self.default_app = firebase_admin.initialize_app()
         self.messaging = firebase_admin.messaging
         self.scopes = ["https://www.googleapis.com/auth/firebase.messaging"]
+        self.firestore: firestore = firestore.client(self.default_app)
 
         # TOKEN IS A PER DEVICE REGISTRATION
         # When you load the mobile app, the home screen will display your appllication ID (or if I get time it will be in the settings),
@@ -81,3 +83,42 @@ class FirebaseApp:
         print("Message: ", response)
 
         return
+
+    def add_user(self, data: dict[str, str]):
+        ref = self.firestore.collection("users").document()
+        ref.set(
+            {
+                "firstname": data["firstname"],
+                "email": data["email"],
+                "emergency_contact_phone": data["emergency_contact_phone"],
+                "lastname": data["lastname"],
+                "emergency_contact_name": data["emergency_contact_name"],
+            }
+        )
+
+    def add_medication_by_user_id(self, data: dict[str, Any]):
+        ref = (
+            self.firestore.collection("users")
+            .document("BMzcY66MlmwygVrdDgvh")
+            .collection("medications")
+            .document()
+        )
+        ref.set(
+            {
+                "medname": data["medname"],
+                "priority": data["priority"],
+                "initial_pill_count": data["initial_pill_count"],
+                "amount_per_use": data["amount_per_use"],
+                "times_per_week": data["times_per_week"],
+                "date_added": data["date_added"],
+                "refill_date": data["refill_date"],
+                "times_per_day": data["times_per_day"],
+            }
+        )
+
+    def read_users_collection(self):
+        users_ref = self.firestore.collection("users")
+        docs = users_ref.stream()
+
+        for doc in docs:
+            print(f"{doc.id} => {doc.to_dict()}")
