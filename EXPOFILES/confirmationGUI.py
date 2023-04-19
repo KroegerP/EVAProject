@@ -1,79 +1,211 @@
+from __future__ import annotations
+import functools
+import os
 import tkinter as tk
-from tkinter import ttk
-from tkinter import *
-from PIL import ImageTk, Image
+from typing import TYPE_CHECKING
+import voiceCommand
+
+from confirmations.individualConfirm import individualConfirm
+from constants.window import *
+import utils.interfaceHelpers as UI
+from utils.itemHelpers import clearLocalUI
+from database.queries.query import medicationsQuery
+from constants.colors import *
+from database.classes.medications import Medication
 
 # this is the function called when the button is clicked
 
+if TYPE_CHECKING:
+    from UIController import UIController
 
-confir = 4
+# img = None
 
-def btnClickFunction():
-	root.destroy()
-
-def noFunct():
-	global confirA
-	confir = 1
-	print(confir)
+medIndexStart = 0
+medIndexEnd = 4
 
 
-def yesFunct():
-	global confir
-	confir = 2
-	print(confir)
-
-def idkFunct():
-	# global confir
-	# confir = 3
-	print("idk")
+def goToCommand(UIController, medName, medId, filePath):
+    UIController.clearUI("Confirm")
+    print("Click")
+    individualConfirm(UIController, medName=medName, medId=medId, filePath=filePath)
+    pass
 
 
-
-# creating tkinter window
-
-def loadingGui(imPath):
-	global root
-	root = Toplevel()
-
-	root.geometry('1280x800')
-	root.configure(background='#F0F8FF')
-	root.title('hi')
-
-	# Adding widgets to the root window
-
-	# This is the section of code which creates the a label
-	Label(root, text='Have you taken your medicine yet?', bg='#F0F8FF', font=('arial', 40, 'normal')).place(x=38, y=37)
-
-	# Creating a photoimage object to use image
-	print(imPath)
-	photo = PhotoImage(file=r'%s' % imPath)
-
-	# photo1 = Image.open("C:\EVA\pillbottles\pillbottle1\Image1.png")
-	#
-	# photo1 = photo1._PhotoImage__photo.zoom(2)
-	#
-	#
-	# photo = PhotoImage(photo1)
-	# here, image option is used to
-	# set image on button
-	Button(root, text='Click Me !', image=photo).place(x=500, y=125)
-
-	Button(root, text='No', bg='#FF4040', font=('arial', 70, 'normal'), command=btnClickFunction).place(x=24, y=150) # all set to same destroy function for demo
-
-	# This is the section of code which creates a button
-	Button(root, text='Yes', bg='#76EE00', font=('arial', 70, 'normal'), command=btnClickFunction).place(x=24, y=375)
-
-	Button(root, text='IDK', bg='#FFB90F', font=('arial', 70, 'normal'), command=btnClickFunction).place(x=24, y=600)
-
-	#Button(root, text='Exit', bg='#9A32CD', font=('arial', 12, 'normal'), command=btnClickFunction).place(x=1100, y=740)
-
-	if confir != 4:
-		return confir
-	print(confir)
-	print("imhere")
-
-	root.mainloop()
+def goBack(UIController: UIController):
+    # clearLocalUI(UIController.canvas, ui_ids)
+    UIController.goToHome()
 
 
-# path = "C:\EVA\pillbottles\pillbottle1\image1.png"
-# loadingGui(path)
+def updateGrid(UIController: UIController, displayedMedications: list[Medication]):
+    myButtons = UIController.canvas.nametowidget(name="buttonFrame")
+    for index in range(0, 4):
+        widget = myButtons.grid_slaves(row=index, column=0)[0]
+        med = displayedMedications[index]
+        widget.configure(text=med.medName)
+        widget.configure(
+            text=med.medName,
+            command=functools.partial(
+                goToCommand,
+                UIController,
+                med.medName,
+                med.id,
+                (med.folderPath + med.medName + ".png"),
+            ),
+        )
+
+    UIController.root.update()
+
+
+def iterateForward(UIController: UIController, medications: list[Medication]):
+    # iterate list forward 4
+    global medIndexStart
+    global medIndexEnd
+    if (medIndexEnd + 1) <= len(medications):
+        medIndexStart += 1
+        medIndexEnd += 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
+
+
+def iterateBackwards(UIController: UIController, medications: list[Medication]):
+    global medIndexStart
+    global medIndexEnd
+    if medIndexStart > 0:
+        medIndexStart -= 1
+        medIndexEnd -= 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
+
+
+def confirmGui(UIController: UIController, hour: str = "00", minute: str = "00"):
+    confirm_key = f"{hour}:{minute}"
+
+    if confirm_key in UIController.confirmDict.keys():
+        num_meds = len(UIController.confirmDict[confirm_key])
+        confirm_label = tk.Label(
+            text=f"You have {num_meds} medications", font=("arial", 55, "normal")
+        )
+
+        medications = UIController.confirmDict[confirm_key]
+
+        button_frame = tk.Frame(
+            UIController.canvas,
+            background=os.getenv("PRIMARY_COLOR"),
+            border=1,
+            name="buttonFrame",
+        )
+        button_frame.grid(row=0, column=0, sticky="e", rowspan=len(medications))
+
+        for index, med in enumerate(UIController.confirmDict[confirm_key]):
+            UI.NewMedBtn(
+                master=UIController.canvas,
+                text=f"{med}",
+                command=functools.partial(goToCommand, UIController, med),
+            ).grid(row=index, column=0, pady=GRID_PADDING)
+
+        medications = UIController.confirmDict[confirm_key]
+
+    else:
+        print("Returning all medications!")
+
+        medications = medicationsQuery(UIController.conn)
+
+        if len(medications) < 4:
+            displayedMedications = medications
+        else:
+            displayedMedications = medications[medIndexStart:medIndexEnd]
+
+        button_frame = tk.Frame(
+            UIController.canvas,
+            background=os.getenv("PRIMARY_COLOR"),
+            border=1,
+            name="buttonFrame",
+        )
+        button_frame.grid(row=0, column=0, sticky="e", rowspan=4)
+
+        for index, med in enumerate(displayedMedications):
+            UI.NewMedBtn(
+                master=button_frame,
+                text=f"{med.medName}",
+                command=functools.partial(
+                    goToCommand,
+                    UIController,
+                    med.medName,
+                    med.id,
+                    (med.folderPath + med.medName + ".png"),
+                ),
+            ).grid(row=index, column=0, pady=GRID_PADDING)
+
+    eva_face = UI.evaFace(file="EXPOFILES/assets/evaFaceRedLarge.png")
+    microphone = tk.PhotoImage(file="EXPOFILES/assets/microphone.png")
+
+    eva_text = UI.evaText(
+        name="evaText",
+        canvas=UIController.canvas,
+        text=f"Select the \nmedicine to confirm \nfor {hour}:{minute}",
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 5, window=eva_text)
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 2, window=eva_face)
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(
+            WINDOW_WIDTH_PADDING, WINDOW_HEIGHT / 2, window=button_frame, anchor=tk.E
+        )
+    )
+
+    iterateFowardButton = tk.Button(
+        master=UIController.canvas,
+        text="->",
+        command=functools.partial(iterateForward, UIController, medications),
+        bg="#F44336",
+        font=(TEXT_FONT, 48, "normal"),
+        fg="#ffffff",
+    )
+
+    iterateBackwardsButton = tk.Button(
+        master=UIController.canvas,
+        text="<-",
+        command=functools.partial(iterateBackwards, UIController, medications),
+        bg="#F44336",
+        font=(TEXT_FONT, 48, "normal"),
+        fg="#ffffff",
+    )
+
+    go_back_btn = UI.NewExitBtn(
+        master=UIController.canvas,
+        text="Go Back",
+        command=functools.partial(goBack, UIController),
+    )
+
+    VC_btn = tk.Button(
+        master=UIController.canvas,
+        image=microphone,
+        command=functools.partial(
+            voiceCommand.record_speech, UIController, medications
+        ),
+        bg="#F44336",
+    )
+    VC_btn.image = microphone
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(
+            0, WINDOW_HEIGHT, window=go_back_btn, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(
+            375, WINDOW_HEIGHT, window=VC_btn, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(
+            1130, WINDOW_HEIGHT / 1.05, window=iterateFowardButton, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["Confirm"].append(
+        UIController.canvas.create_window(
+            585, WINDOW_HEIGHT / 1.05, window=iterateBackwardsButton, anchor=tk.SW
+        )
+    )

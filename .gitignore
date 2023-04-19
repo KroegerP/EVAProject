@@ -1,2 +1,11 @@
 venv/
-EXPOFILES/__pycache__
+
+# Removes all __pycache__ directories from repo
+**/__pycache__/
+EXPOFILES/assets/evaFaceRedLarge.png:Zone.Identifier
+EXPOFILES/assets/output-onlinepngtools.png:Zone.Identifier
+EXPOFILES/assets/drugInfoImages/*
+**/certs/
+
+
+.env

@@ -1,66 +1,154 @@
+from __future__ import annotations
+import os
 import tkinter as tk
-from tkinter import ttk
-from tkinter import *
-from PIL import ImageTk, Image
+from typing import TYPE_CHECKING
+import functools
+import voiceCommand
 
-from report2 import *
+# from report2 import *
+from reports.individualReport import individualReport
+import utils.interfaceHelpers as UI
+from database.queries.query import medicationsQuery
+from database.classes.medications import Medication
 
-# this is the function called when the button is clicked
+from constants.colors import *
+from constants.window import *
 
+if TYPE_CHECKING:
+    from UIController import UIController
 
-confir = 4
+medIndexStart = 0
+medIndexEnd = 4
 
-def report2command():
-	root.destroy()
-	loadingReportGui2()
+def goToCommand(UIController, medName):
+    print("Click")
+    individualReport(UIController, medName=medName)
+    pass
 
-def btnClickFunction():
-	root.destroy()
+def updateGrid(UIController: UIController, displayedMedications: list[Medication]):
+    myButtons = UIController.canvas.nametowidget(name="buttonFrame")
+    for index in range(0,4):
+        widget = myButtons.grid_slaves(row=index, column=0)[0]
+        med = displayedMedications[index]
+        widget.configure(text=med.medName)
+        widget.configure(
+            text=med.medName,
+            command=functools.partial(
+                goToCommand,
+                UIController,
+                med.medName,
+            ))
 
+    UIController.root.update()
 
-# creating tkinter window
+def iterateForward(UIController: UIController, medications : list[Medication]):
+    #iterate list forward 4
+    global medIndexStart
+    global medIndexEnd
+    if (medIndexEnd + 1) <= len(medications):
+        medIndexStart += 1
+        medIndexEnd += 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
 
-def loadingReportGui():
-	global root
-	root = Toplevel()
+def iterateBackwards(UIController: UIController, medications: list[Medication]):
+    global medIndexStart
+    global medIndexEnd
+    if medIndexStart > 0:
+        medIndexStart -= 1
+        medIndexEnd -= 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
 
-	root.geometry('1280x800')
-	root.configure(background='#F0F8FF')
-	root.title('hi')
+# hides the home GUI and updates the canvas with the reports GUI
+def reportGui(UIController: UIController) -> None:
+    medications = medicationsQuery(UIController.conn)
+    
+    if(len(medications) < 4):
+        displayedMedications = medications
+    else:
+        displayedMedications = medications[medIndexStart:medIndexEnd]
+    
+    button_frame = tk.Frame(
+        UIController.canvas, background=os.getenv("PRIMARY_COLOR"), border=1, name="buttonFrame"
+    )
+    button_frame.grid(row=0, column=0, sticky="e", rowspan=len(medications))
 
-	mat = PhotoImage(file="matplotlib.png")
+    for index, med in enumerate(displayedMedications):
+        UI.NewMedBtn(
+            master=button_frame,
+            text=f"{med.medName}",
+            command=functools.partial(goToCommand, UIController, med.medName),
+        ).grid(row=index, column=0, pady=GRID_PADDING)
+        print(med.medName)
+        print(index)
 
+    eva_face = UI.evaFace(file="EXPOFILES/assets/evaFaceRedLarge.png")
+    microphone = tk.PhotoImage(file="EXPOFILES/assets/microphone.png")
+    VC_btn = tk.Button(
+        master=UIController.canvas,
+        image=microphone,
+        command=functools.partial(
+            voiceCommand.record_speech, UIController, medications
+        ),
+        bg="#F44336",
+    )
+    VC_btn.image = microphone
 
-	# Adding widgets to the root window
+    eva_text = UI.evaText(
+        name="evaText", canvas=UIController.canvas, text="Select a \nmedication report"
+    )
+    go_back_btn = UI.NewExitBtn(
+        master=UIController.canvas, text="Go Back", command=UIController.goToHome
+    )
 
-	# This is the section of code which creates the a label
-	Label(root, text='', bg='#F0F8FF', font=('arial', 40, 'normal')).place(x=38, y=37)
+    iterateFowardButton = tk.Button(
+        master=UIController.canvas,
+        text="->",
+        command=functools.partial(iterateForward, UIController, medications),
+        bg="#F44336",
+        font=(TEXT_FONT, 48, "normal"),
+        fg="#ffffff"
+    )
 
-	# Creating a photoimage object to use image
-	imPath = "report1.png"
-	photo = PhotoImage(file=imPath)
+    iterateBackwardsButton = tk.Button(
+        master=UIController.canvas,
+        text="<-",
+        command=functools.partial(iterateBackwards, UIController, medications),
+        bg="#F44336",
+        font=(TEXT_FONT, 48, "normal"),
+        fg="#ffffff"
+    )
 
-	print("oeo")
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 5, window=eva_text)
+    )
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 2, window=eva_face)
+    )
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(
+            WINDOW_WIDTH_PADDING, WINDOW_HEIGHT / 2, window=button_frame, anchor=tk.E
+        )
+    )
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(
+            375, WINDOW_HEIGHT, window=VC_btn, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(
+            0, WINDOW_HEIGHT, window=go_back_btn, anchor=tk.SW
+        )
+    )
 
-	Button(root, text='Click Me !', image=photo).place(x=100, y=125)
-
-	#Label(root, text='Click Me !', image=mat, height=100, width=100).place(x=0, y=0)
-
-
-
-	# This is the section of code which creates a button
-	Button(root, text='Cognitive report', bg='#76EE00', font=('arial', 40, 'normal'), command=report2command).place(x=24, y=675)
-
-
-	Button(root, text='Exit', bg='#9A32CD', font=('arial', 40, 'normal'), command=btnClickFunction).place(x=1100, y=640)
-
-	if confir != 4:
-		return confir
-	print(confir)
-	print("imhere")
-
-	root.mainloop()
-
-
-# path = "C:\EVA\pillbottles\pillbottle1\image1.png"
-# loadingGui(path)
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(
+            1130, WINDOW_HEIGHT / 1.05, window=iterateFowardButton, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["Report"].append(
+        UIController.canvas.create_window(
+            585, WINDOW_HEIGHT / 1.05, window=iterateBackwardsButton, anchor=tk.SW
+        )
+    )

@@ -1,59 +1,168 @@
-#specificDruginfo
-
+from __future__ import annotations
+import os
 import tkinter as tk
-from tkinter import ttk
-from tkinter import *
-from PIL import ImageTk, Image
+from typing import TYPE_CHECKING
 
-from drugsCom import *
+from drugInfo.individualDrug import individualDrug
+import functools
+import voiceCommand
 
+from database.queries.query import medicationsQuery
 
-# this is the function called when the button is clicked
+from constants.window import *
+import utils.interfaceHelpers as UI
+from database.classes.medications import Medication
 
+if TYPE_CHECKING:
+    from UIController import UIController
 
-confir = 4
+medIndexStart = 0
+medIndexEnd = 4
 
-def btnClickFunction():
+def goToCommand(UIController, medName):
+    print("Click")
+    individualDrug(UIController, medName=medName)
+    return
 
-	root.destroy()
+def updateGrid(UIController: UIController, displayedMedications: list[Medication]):
+    myButtons = UIController.canvas.nametowidget(name="buttonFrame")
+    for index in range(0,4):
+        widget = myButtons.grid_slaves(row=index, column=0)[0]
+        med = displayedMedications[index]
+        widget.configure(text=med.medName)
+        widget.configure(
+            text=med.medName,
+            command=functools.partial(
+                goToCommand,
+                UIController,
+                med.medName,
+            ))
 
+    UIController.root.update()
 
-# creating tkinter window
+def iterateForward(UIController: UIController, medications : list[Medication]):
+    #iterate list forward 4
+    global medIndexStart
+    global medIndexEnd
+    if (medIndexEnd + 1) <= len(medications):
+        medIndexStart += 1
+        medIndexEnd += 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
 
-def loadingDrugGui():
-	global root
-	root = Toplevel()
+def iterateBackwards(UIController: UIController, medications: list[Medication]):
+    global medIndexStart
+    global medIndexEnd
+    if medIndexStart > 0:
+        medIndexStart -= 1
+        medIndexEnd -= 1
+    dispalyedMedications = medications[medIndexStart:medIndexEnd]
+    updateGrid(UIController, dispalyedMedications)
 
-	bg = PhotoImage(file="view.png")
+def loadingDrugGui(UIController: UIController):
+    # This is the section of code which creates the a label
+    d_info_label = tk.Label(
+        UIController.canvas,
+        text="Drug Info",
+        bg=os.getenv("PRIMARY_COLOR"),
+        font=(os.getenv("TEXT_FONT"), 40, "normal"),
+    )
 
-	root.geometry('1280x800')
+    go_back_btn = UI.NewExitBtn(
+        master=UIController.canvas, text="Go Back", command=UIController.goToHome
+    )
 
-	# Adding widgets to the root window
+    UIController.canvasIds["DrugInfo"] = []
 
-	# This is the section of code which creates the a label
-	Label(root, text='Click Me !', image=bg).place(x=0, y=0)
+    medications = medicationsQuery(UIController.conn)
 
+    if(len(medications) < 4):
+            displayedMedications = medications
+    else:
+        displayedMedications = medications[medIndexStart:medIndexEnd]
 
-	# Creating a photoimage object to use image
-	imPath = "timesAsked.png"
-	photo = PhotoImage(file=imPath)
+    button_frame = tk.Frame(
+        UIController.canvas, background=os.getenv("PRIMARY_COLOR"), border=1, name="buttonFrame"
+    )
+    button_frame.grid(row=0, column=0, sticky="e", rowspan=len(medications))
 
-	print("oeo")
+    for index, med in enumerate(displayedMedications):
+        UI.NewMedBtn(
+            master=button_frame,
+            text=f"{med.medName}",
+            command=functools.partial(goToCommand, UIController, med.medName),
+        ).grid(row=index, column=0, pady=GRID_PADDING)
 
-	Button(root, text='Rosuvastatin', bg='#FFB90F', font=('Roboto', 40, 'normal'), command=rosuvastatin).place(x=200, y=200)
+    eva_face = UI.evaFace(file="EXPOFILES/assets/evaFaceRedLarge.png")
+    microphone = tk.PhotoImage(file="EXPOFILES/assets/microphone.png")
+    eva_text = UI.evaText(
+        name="evaText",
+        canvas=UIController.canvas,
+        text="Select a \nmed for information",
+    )
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 5, window=eva_text)
+    )
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(275, WINDOW_HEIGHT / 2, window=eva_face)
+    )
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            WINDOW_WIDTH_PADDING, WINDOW_HEIGHT / 2, window=button_frame, anchor=tk.E
+        )
+    )
+    VC_btn = tk.Button(
+        master=UIController.canvas,
+        image=microphone,
+        command=functools.partial(
+            voiceCommand.record_speech, UIController, medications
+        ),
+        bg="#F44336",
+    )
+    VC_btn.image = microphone
 
-	Button(root, text='Tamsulosin', bg='#E1912A', font=('Roboto', 40, 'normal'), command=tamsulosin).place(x=700, y=200)
+    iterateFowardButton = tk.Button(
+        master=UIController.canvas,
+        text="->",
+        command=functools.partial(iterateForward, UIController, medications),
+        bg="#F44336",
+        font=("Inter", 48, "normal"),
+        fg="#ffffff"
+    )
 
-	Button(root, text='Exit', bg='#9A32CD', font=('Roboto', 40, 'normal'), command=btnClickFunction).place(x=1100, y=640)
+    iterateBackwardsButton = tk.Button(
+        master=UIController.canvas,
+        text="<-",
+        command=functools.partial(iterateBackwards, UIController, medications),
+        bg="#F44336",
+        font=("Inter", 48, "normal"),
+        fg="#ffffff"
+    )
 
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            0, WINDOW_HEIGHT, window=go_back_btn, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            375, WINDOW_HEIGHT, window=VC_btn, anchor=tk.SW
+        )
+    )
 
-	if confir != 4:
-		return confir
-	print(confir)
-	print("imhere")
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            WINDOW_WIDTH / 2, WINDOW_HEIGHT / 20, window=d_info_label, anchor=tk.N
+        )
+    )
 
-	root.mainloop()
-
-
-# path = "C:\EVA\pillbottles\pillbottle1\image1.png"
-# loadingGui(path)
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            1130, WINDOW_HEIGHT / 1.05, window=iterateFowardButton, anchor=tk.SW
+        )
+    )
+    UIController.canvasIds["DrugInfo"].append(
+        UIController.canvas.create_window(
+            585, WINDOW_HEIGHT / 1.05, window=iterateBackwardsButton, anchor=tk.SW
+        )
+    )
